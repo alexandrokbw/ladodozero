@@ -297,3 +297,12 @@
         font-size: 8px;
       }
     }
+    .buttonversao2 {
+    display: inline-block;
+    padding: 10px 20px;
+    background: none;
+    border: 1px solid #000;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+}
