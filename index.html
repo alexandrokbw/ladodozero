@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rastreador de Roleta (Baccarat Style)</title>
+
+  <style>
+    :root {
+      --primary: #00d4ff;
+      --bg: #111;
+      --surface: #222;
+      --text: #fff;
+      --border: rgba(255, 255, 255, 0.1);
+      --hot: #ef4444;
+      --cold: #06b6d4;
+      --warning: #f59e0b;
+      --success: #4ade80;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .input {
+      flex: 1;
+      min-width: 150px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+    }
+
+    .button {
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .button:active {
+      transform: translateY(0);
+    }
+
+    .btn-add {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .btn-undo {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-clear {
+      background: var(--hot);
+      color: var(--text);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    .grupo-1 {
+      color: var(--success);
+    }
+
+    .grupo-2 {
+      color: var(--hot);
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .tracker-wrapper {
+      position: relative;
+    }
+
+    .tracker-container {
+      display: grid;
+      grid-template-columns: repeat(20, 28px);
+      grid-template-rows: repeat(6, 28px);
+      gap: 2px;
+      width: fit-content;
+      margin: 0 auto;
+    }
+
+    .cell {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 28px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 2px;
+    }
+
+    .ball {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .grupo-1-ball {
+      background: var(--success);
+      color: var(--bg);
+    }
+
+    .grupo-2-ball {
+      background: var(--hot);
+      color: var(--text);
+    }
+
+    .zero-ball {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .legend-item span {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        flex-direction: column;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tracker-container {
+        grid-template-columns: repeat(20, 24px);
+        grid-template-rows: repeat(6, 24px);
+        gap: 1px;
+      }
+
+      .cell {
+        width: 24px;
+        height: 24px;
+      }
+
+      .ball {
+        width: 20px;
+        height: 20px;
+        font-size: 9px;
+      }
+
+      .item {
+        text-align: center;
+      }
+
+      .item img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        border: 2px solid #0ff;
+        box-shadow: 0 0 15px #0ff;
+      }
+
+      .item h2 {
+        margin: 12px 0 0;
+        font-size: 1.8em;
+        color: #0ff;
+        text-shadow: 0 0 10px #0ff;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tracker-container {
+        grid-template-columns: repeat(20, 20px);
+        grid-template-rows: repeat(6, 20px);
+      }
+
+      .cell {
+        width: 20px;
+        height: 20px;
+      }
+
+      .ball {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+      }
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreador de Roleta - Estilo Baccarat</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1 class="title">Rastreador de Roleta</h1>
+        <p class="subtitle">Visualização estilo Baccarat Road</p>
+      </div>
+
+
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stats-grid">
+
+            <div class="stat-card">
+              <div class="stat-label">Grupo 1: 7, 29, 18, 22, 9, 31, 14, 20, 1,
+                21, 2, 25, 17, 34, 6, 27, 13, 36</div>
+              <div class="stat-value grupo-1" id="totalGrupo1">0</div>
+              <div class="stat-label">Grupo 1: 9,34 - 4V</div>
+
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Grupo 2: 28, 12, 35, 3, 26, 0, 32, 15, 19, 4, 33, 16, 24, 5, 10, 23, 8, 30, 11
+              </div>
+              <div class="stat-value grupo-2" id="totalGrupo2">0</div>
+               <div class="stat-label">Grupo 2: 0 - 5V,  10 - 4V</div>
+            </div>
+
+          </div>
+          <div class="stat-label">Total de Jogadas</div>
+          <div class="stat-value" id="totalJogadas">0</div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Mapa de Rastreamento</h2>
+        <div class="tracker-wrapper">
+          <div class="tracker-container" id="trackerContainer"></div>
+          <div class="empty-state" id="emptyState">
+            <p>Nenhum número registrado ainda</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Digite um número e pressione Enter ou clique em Adicionar
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="controls">
+        <input type="number" id="numeroInput" class="input" min="0" max="36" placeholder="Número (0-36)" autofocus>
+        <button onclick="adicionarNumero()" class="button btn-add">Adicionar</button>
+        <button onclick="desfazer()" class="button btn-undo">Desfazer</button>
+        <button onclick="limpar()" class="button btn-clear">Limpar Tudo</button>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Legenda</h2>
+        <div class="legend">
+          <div class="item">
+            <img src="g2.png" alt="G2">
+            <h2>G2</h2>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Definição dos grupos
+      const grupo1Numeros = new Set([
+        7, 29, 18, 22, 9, 31, 14, 20, 1,
+        21, 2, 25, 17, 34, 6, 27, 13, 36
+      ]);
+
+      // Configurações do grid
+      const MAX_LINHAS = 6;
+      const MAX_COLUNAS = 30;
+
+      // Estado da aplicação
+      let resultados = [];
+      const trackerContainer = document.getElementById('trackerContainer');
+      const emptyState = document.getElementById('emptyState');
+      const numeroInput = document.getElementById('numeroInput');
+
+      // Event listener para tecla Enter
+      numeroInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          adicionarNumero();
+        }
+      });
+
+      // Função para determinar o tipo do número
+      function obterTipo(numero) {
+
+        return grupo1Numeros.has(numero) ? 'grupo-1' : 'grupo-2';
+      }
+
+      // Função para adicionar número
+      function adicionarNumero() {
+        const valor = parseInt(numeroInput.value, 10);
+
+        if (isNaN(valor) || valor < 0 || valor > 36) {
+          alert('Por favor, insira um número válido entre 0 e 36.');
+          return;
+        }
+
+        resultados.push(valor);
+        numeroInput.value = '';
+        numeroInput.focus();
+        renderizar();
+      }
+
+      // Função para desfazer última jogada
+      function desfazer() {
+        if (resultados.length === 0) return;
+        resultados.pop();
+        renderizar();
+      }
+
+      // Função para limpar tudo
+      function limpar() {
+        if (resultados.length === 0) return;
+
+        if (confirm('Tem certeza que deseja limpar todos os registros?')) {
+          resultados = [];
+          renderizar();
+        }
+      }
+
+      // Função principal de renderização
+      function renderizar() {
+        atualizarEstatisticas();
+        renderizarTracker();
+      }
+
+      // Atualizar estatísticas
+      function atualizarEstatisticas() {
+        const total = resultados.length;
+        const grupo1Count = resultados.filter(n => grupo1Numeros.has(n)).length;
+        const grupo2Count = resultados.filter(n => n !== 0 && !grupo1Numeros.has(n)).length;
+        //const zerosCount = resultados.filter(n => n === 0).length;
+
+        document.getElementById('totalJogadas').textContent = total;
+        document.getElementById('totalGrupo1').textContent = grupo1Count;
+        document.getElementById('totalGrupo2').textContent = grupo2Count;
+
+      }
+
+      // Renderizar o tracker estilo Baccarat
+      function renderizarTracker() {
+        trackerContainer.innerHTML = '';
+
+        if (resultados.length === 0) {
+          emptyState.style.display = 'block';
+          trackerContainer.style.display = 'none';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+        trackerContainer.style.display = 'grid';
+
+        trackerContainer.style.overflowX = 'auto';
+        trackerContainer.style.overflowY = 'hidden';
+        trackerContainer.style.maxWidth = '100%'; // ou valor fixo
+        trackerContainer.style.gridTemplateColumns = 'repeat(30, 1fr)';
+        trackerContainer.style.gridTemplateRows = 'repeat(6, 1fr)';
+
+
+        // Inicializa matriz do grid
+        const grid = Array(MAX_LINHAS).fill(0).map(() => Array(MAX_COLUNAS).fill(null));
+        let colunaAtual = 0;
+        let linhaAtual = 0;
+
+        for (let i = 0; i < resultados.length; i++) {
+          const numeroAtual = resultados[i];
+          const tipoAtual = obterTipo(numeroAtual);
+
+          // Lógica de navegação estilo Baccarat
+          if (i > 0) {
+            const numeroAnterior = resultados[i - 1];
+            const tipoAnterior = obterTipo(numeroAnterior);
+
+            // Se o tipo mudou OU se não há espaço na coluna atual
+            if (tipoAtual !== tipoAnterior) {
+              colunaAtual++;
+              linhaAtual = 0;
+            } else {
+              // Mesmo tipo: tenta mover para baixo
+              let proximaLinha = linhaAtual + 1;
+
+              // Procura próxima linha vazia na coluna atual
+              while (proximaLinha < MAX_LINHAS && grid[proximaLinha][colunaAtual] !== null) {
+                proximaLinha++;
+              }
+
+              if (proximaLinha < MAX_LINHAS) {
+                linhaAtual = proximaLinha;
+              } else {
+                // Sem espaço abaixo: move para direita na última linha
+                colunaAtual++;
+                linhaAtual = MAX_LINHAS - 1;
+              }
+            }
+          }
+
+          // Adiciona na grid se houver espaço
+          if (colunaAtual < MAX_COLUNAS && grid[linhaAtual][colunaAtual] === null) {
+            grid[linhaAtual][colunaAtual] = { tipo: tipoAtual, valor: numeroAtual };
+          }
+        }
+
+        // Renderiza o grid visualmente
+        for (let l = 0; l < MAX_LINHAS; l++) {
+          for (let c = 0; c < MAX_COLUNAS; c++) {
+            const cellData = grid[l][c];
+            const cellDiv = document.createElement('div');
+            cellDiv.classList.add('cell');
+
+            if (cellData) {
+              const ballDiv = document.createElement('div');
+              ballDiv.classList.add('ball', `${cellData.tipo}-ball`);
+              ballDiv.textContent = cellData.valor;
+              cellDiv.appendChild(ballDiv);
+            }
+
+            trackerContainer.appendChild(cellDiv);
+          }
+        }
+      }
+
+      // Inicialização
+      renderizar();
+    </script>
+  </body>
+
+  </html>
+
+  <script>
+
+  </script>
+</body>
+
+</html>
