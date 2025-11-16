@@ -1,7 +1,6 @@
 // Definição dos grupos
       const grupo1Numeros = new Set([
-        7, 29, 18, 22, 9, 31, 14, 20, 1,
-        21, 2, 25, 17, 34, 6, 27, 13, 36
+       28,12,35,3,26,0,32,15,19,4,33,16,24,5,10,23,8,30,11
       ]);
 
       // Configurações do grid
@@ -161,4 +160,5 @@
       }
 
       // Inicialização
+
       renderizar();
