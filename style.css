@@ -229,7 +229,16 @@
     .legend-item span {
       color: rgba(255, 255, 255, 0.8);
     }
-
+ .item img {
+  width: 100%;
+  max-width: 1400px; /* tamanho máximo que você quiser */
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 15px #0ff;
+  display: block;
+  margin: 0 auto; /* centraliza, porque estilo é tudo 😎 */
+}
     @media (max-width: 768px) {
       .controls {
         flex-direction: column;
@@ -258,16 +267,7 @@
         text-align: center;
       }
 
-     .item img {
-  width: 100%;
-  max-width: 1400px; /* tamanho máximo que você quiser */
-  height: auto;
-  border-radius: 12px;
-  border: 2px solid #0ff;
-  box-shadow: 0 0 15px #0ff;
-  display: block;
-  margin: 0 auto; /* centraliza, porque estilo é tudo 😎 */
-}
+    
 
 
       .item h2 {
@@ -308,6 +308,7 @@
     text-decoration: none;
     border-radius: 5px;
 }
+
 
 
 
