@@ -235,9 +235,7 @@
         flex-direction: column;
       }
 
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      
 
       .tracker-container {
         grid-template-columns: repeat(20, 24px);
@@ -310,4 +308,5 @@
     text-decoration: none;
     border-radius: 5px;
 }
+
 
