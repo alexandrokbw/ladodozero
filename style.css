@@ -260,13 +260,17 @@
         text-align: center;
       }
 
-      .item img {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-        border: 2px solid #0ff;
-        box-shadow: 0 0 15px #0ff;
-      }
+     .item img {
+  width: 100%;
+  max-width: 380px; /* tamanho máximo que você quiser */
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 15px #0ff;
+  display: block;
+  margin: 0 auto; /* centraliza, porque estilo é tudo 😎 */
+}
+
 
       .item h2 {
         margin: 12px 0 0;
@@ -306,3 +310,4 @@
     text-decoration: none;
     border-radius: 5px;
 }
+
