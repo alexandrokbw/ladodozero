@@ -260,7 +260,7 @@
 
      .item img {
   width: 100%;
-  max-width: 380px; /* tamanho máximo que você quiser */
+  max-width: 1400px; /* tamanho máximo que você quiser */
   height: auto;
   border-radius: 12px;
   border: 2px solid #0ff;
@@ -308,5 +308,6 @@
     text-decoration: none;
     border-radius: 5px;
 }
+
 
 
