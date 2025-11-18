@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreador de Roleta - Estilo Baccarat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Rastreador de Roleta</h1>
+            <p class="subtitle">Apostar apenas do lado do zero </p>
+        </div>
+
+
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-label grupo-1">Grupo 1:9,31,14,20,1,33,16,24,5,10,15,19,4,21,2,25,17,34,6,27 </div>
+                        
+                        <div class="stat-label">Grupo 1: 0 com 9V</div>
+                        <div class="stat-value grupo-1" id="totalGrupo1">0</div>
+
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label grupo-2">Grupo 2:22,18,29,7,28,12,35,3,26,0,32,
+                            23,8,30,11,36,13
+                        </div>
+                        
+                        <div class="stat-label">Grupo 2: 10 com 9V</div>
+                        <div class="stat-value grupo-2" id="totalGrupo2">0</div>
+                    </div>
+
+                </div>
+                <div class="stat-label">Total de Jogadas</div>
+                <div class="stat-value" id="totalJogadas">0</div>
+            </div>
+
+        </div>
+
+        <div class="panel">
+            <h2 class="panel-title">Mapa de Rastreamento</h2>
+            <div class="tracker-wrapper">
+                <div class="tracker-container" id="trackerContainer"></div>
+                <div class="empty-state" id="emptyState">
+                    <p>Nenhum número registrado ainda</p>
+                    <p style="font-size: 0.8rem; margin-top: 0.5rem;">Digite um número e pressione Enter ou clique em
+                        Adicionar
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <input type="number" id="numeroInput" class="input" min="0" max="36" placeholder="Número (0-36)" autofocus>
+            <button onclick="adicionarNumero()" class="button btn-add">Adicionar</button>
+            <button onclick="desfazer()" class="button btn-undo">Desfazer</button>
+            <button onclick="limpar()" class="button btn-clear">Limpar Tudo</button>
+            <a href="index.html" class="buttonversao2">versao 1</a>
+
+        </div>
+
+        <div class="panel">
+            <h2 class="panel-title">Legenda</h2>
+            <div class="legend">
+                <div class="item">
+                    <img src="g4.png" alt="G2">
+                    <h2>Lado do zero</h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="script3.js"></script>
+</body>
+
+</html>
